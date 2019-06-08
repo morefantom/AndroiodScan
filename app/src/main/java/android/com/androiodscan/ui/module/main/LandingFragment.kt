@@ -11,6 +11,8 @@ import android.com.androiodscan.R
 import android.com.androiodscan.data.ApiResponse
 import android.com.androiodscan.repository.remote.RemoteController
 import android.util.Log
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.fragment_landing.*
 import retrofit2.Call
 import retrofit2.Response
 
@@ -20,13 +22,20 @@ class LandingFragment : Fragment() {
         fun newInstance() = LandingFragment()
     }
 
-    private lateinit var viewModel: LandingViewModel
+    private var landingListAdapter: LandingListAdapter ?= null
+    private var viewModel: LandingViewModel ?= null
+    private var apiResponses = mutableListOf<ApiResponse>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        landingListAdapter = LandingListAdapter(this.context, apiResponses)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.landing_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_landing, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -39,12 +48,36 @@ class LandingFragment : Fragment() {
             }
 
             override fun onResponse(call: Call<List<ApiResponse>>, response: Response<List<ApiResponse>>) {
+                if (response.isSuccessful){
+                    response.body()?.let {
+                        apiResponses.addAll(it)
+                        landingListAdapter?.swap(apiResponses)
+                        landingListAdapter?.notifyDataSetChanged()
+                    }
+                }
                 response.body()?.forEach { apiResponse ->
                     Log.i("Response Success", apiResponse.name)
                 }
             }
 
         })
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupRecycleView()
+    }
+
+    private fun setupRecycleView(){
+
+        recyclerView_landing.apply {
+            layoutManager = LinearLayoutManager(activity)
+            landingListAdapter?.let {
+                adapter = it
+            }
+
+        }
     }
 
 }
