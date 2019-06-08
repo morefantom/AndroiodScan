@@ -11,6 +11,7 @@ import android.com.androiodscan.R
 import android.com.androiodscan.data.ApiResponse
 import android.com.androiodscan.databinding.DetailFragmentBinding
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.detail_fragment.*
 
 class DetailFragment : Fragment() {
@@ -26,6 +27,14 @@ class DetailFragment : Fragment() {
 
     private var viewModel: DetailViewModel ?= null
     private var binding: DetailFragmentBinding ?= null
+    private var detailListAdapter: DetailListAdapter ?= null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        apiResponse?.criteria?.let {
+            detailListAdapter = DetailListAdapter(this.context, it)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,4 +51,18 @@ class DetailFragment : Fragment() {
         // TODO: Use the ViewModel
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupRecyclerView()
+    }
+
+    private fun setupRecyclerView(){
+        recyclerView_detail.apply {
+            layoutManager = LinearLayoutManager(activity)
+            detailListAdapter?.let {
+                adapter = it
+            }
+        }
+    }
 }
