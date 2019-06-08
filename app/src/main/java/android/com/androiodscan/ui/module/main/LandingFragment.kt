@@ -1,6 +1,5 @@
 package android.com.androiodscan.ui.module.main
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -23,7 +22,6 @@ class LandingFragment : Fragment() {
     }
 
     private var landingListAdapter: LandingListAdapter ?= null
-    private var viewModel: LandingViewModel ?= null
     private var apiResponses = mutableListOf<ApiResponse>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,8 +38,6 @@ class LandingFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(LandingViewModel::class.java)
-        // TODO: Use the ViewModel
         RemoteController.apiResponseDao().getApiResponse().enqueue(object : Callback<List<ApiResponse>> {
             override fun onFailure(call: Call<List<ApiResponse>>, t: Throwable) {
                 Log.i("Response Fail", t.message)
@@ -50,13 +46,11 @@ class LandingFragment : Fragment() {
             override fun onResponse(call: Call<List<ApiResponse>>, response: Response<List<ApiResponse>>) {
                 if (response.isSuccessful){
                     response.body()?.let {
+                        apiResponses.clear()
                         apiResponses.addAll(it)
                         landingListAdapter?.swap(apiResponses)
                         landingListAdapter?.notifyDataSetChanged()
                     }
-                }
-                response.body()?.forEach { apiResponse ->
-                    Log.i("Response Success", apiResponse.name)
                 }
             }
 

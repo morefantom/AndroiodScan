@@ -1,15 +1,23 @@
 package android.com.androiodscan.util
 
-import androidx.databinding.BindingAdapter
+import android.graphics.Color
+import androidx.databinding.BindingConversion
 
-class BindingAdapters {
+object BindingAdapters {
 
-    companion object{
-
-        @JvmStatic
-        @BindingAdapter("color")
-        fun getColor(color: String){
-            
+    @JvmStatic
+    @BindingConversion
+    fun convertStringToColor(colorString: String): Int{
+        return when (colorString){
+            "red"->{
+                Color.RED
+            }
+            "green"->{
+                Color.GREEN
+            }
+            else->{
+                Color.WHITE
+            }
         }
     }
 }

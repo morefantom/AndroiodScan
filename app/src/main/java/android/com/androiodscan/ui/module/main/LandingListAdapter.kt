@@ -2,17 +2,24 @@ package android.com.androiodscan.ui.module.main
 
 import android.com.androiodscan.R
 import android.com.androiodscan.data.ApiResponse
+import android.com.androiodscan.data.MessageLanding
 import android.com.androiodscan.databinding.ItemLandingBinding
+import android.com.androiodscan.ui.interfaces.ClickingInterface
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import org.greenrobot.eventbus.EventBus
 
 class LandingListAdapter(var context: Context?, private var apiResponses: List<ApiResponse>)
-: RecyclerView.Adapter<LandingListAdapter.ViewHolder>()
+: RecyclerView.Adapter<LandingListAdapter.ViewHolder>(), ClickingInterface
 {
+    override fun onItemClick(apiResponse: ApiResponse) {
+        EventBus.getDefault().post(MessageLanding(apiResponse))
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -37,18 +44,9 @@ class LandingListAdapter(var context: Context?, private var apiResponses: List<A
     inner class ViewHolder(val binding: ItemLandingBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(apiResponse: ApiResponse){
             binding.response = apiResponse
-//            binding.event = this@LandingListAdapter
+            binding.event = this@LandingListAdapter
             binding.executePendingBindings()
         }
     }
-//
-//    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-//        EventBus.getDefault().register(this)
-//        super.onAttachedToRecyclerView(recyclerView)
-//    }
-//
-//    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-//        EventBus.getDefault().unregister(this)
-//        super.onDetachedFromRecyclerView(recyclerView)
-//    }
+
 }

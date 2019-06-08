@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.com.androiodscan.util.BindingAdapters"/>
+        <variable name="response" type="android.com.androiodscan.data.ApiResponse"/>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".ui.module.detail.DetailFragment">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" android:id="@+id/constraintLayout_header"
+                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp" android:layout_marginStart="16dp"
+                app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="16dp" android:background="@color/colorHeaderBack">
+
+            <TextView
+                    android:text="@{response.name}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/textView_detail_name"
+                    app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
+                    android:textSize="18sp"/>
+            <TextView
+                    android:text="@{response.tag}"
+                    android:textColor="@{BindingAdapters.convertStringToColor(response.color)}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/textView_detail_tag"
+                    app:layout_constraintTop_toBottomOf="@+id/textView_detail_name"
+                    app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="16dp"
+                    android:textSize="12sp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

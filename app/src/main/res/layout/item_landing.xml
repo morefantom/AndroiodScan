@@ -5,14 +5,20 @@
 
     <data>
 
+        <import type="android.view.View"/>
+        <import type="android.com.androiodscan.util.BindingAdapters"/>
         <variable name="response" type="android.com.androiodscan.data.ApiResponse"/>
+        <variable name="event" type="android.com.androiodscan.ui.interfaces.ClickingInterface"/>
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="@{()->event.onItemClick(response)}">
 
         <TextView
                 android:text="@{response.name}"
@@ -23,6 +29,7 @@
                 android:layout_marginStart="16dp" android:layout_marginTop="8dp"/>
         <TextView
                 android:text="@{response.tag}"
+                android:textColor="@{BindingAdapters.convertStringToColor(response.color)}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/textView_tag"
                 app:layout_constraintBottom_toBottomOf="parent" android:layout_marginTop="8dp"
