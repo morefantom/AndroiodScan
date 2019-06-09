@@ -9,11 +9,11 @@ import android.text.Spanned
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingConversion
+import org.greenrobot.eventbus.EventBus
 
 object BindingAdapters {
 
@@ -44,14 +44,20 @@ object BindingAdapters {
 
                 criteriaText = when (entry.value.type){
                     "indicator" -> {
+                        entry.value.firstIndex = criteriaText?.indexOf(entry.key)
+                        entry.value.spanSize = entry.value.default_value.toString().length
                         criteriaText?.replace(entry.key,"(${entry.value.default_value})")
                     }
                     "value" -> {
+                        entry.value.firstIndex = criteriaText?.indexOf(entry.key)
                         entry.value.values?.get(0)?.let {firstValue ->
-                            if(firstValue%1 == 0f)
-                                criteriaText?.replace(entry.key,"(${firstValue.toInt()})")
-                            else
-                                criteriaText?.replace(entry.key,"($firstValue)")
+                            if(firstValue%1 == 0f) {
+                                entry.value.spanSize = firstValue.toInt().toString().length
+                                criteriaText?.replace(entry.key, "(${firstValue.toInt()})")
+                            } else {
+                                entry.value.spanSize = firstValue.toString().length
+                                criteriaText?.replace(entry.key, "($firstValue)")
+                            }
                         }
                     }
                     else -> ""
@@ -59,7 +65,6 @@ object BindingAdapters {
             }
             var spannableString = SpannableString(criteriaText)
             criteria.variable?.forEach { entry ->
-                val startIndex = criteriaText?.indexOf("(") ?: return
                 spannableString.setSpan(object : ClickableSpan(){
                     override fun updateDrawState(ds: TextPaint) {
                         super.updateDrawState(ds)
@@ -68,8 +73,9 @@ object BindingAdapters {
 
                     override fun onClick(widget: View) {
                         widget.context.startActivity(Intent(widget.context, MainActivity::class.java))
+
                     }
-                }, startIndex, startIndex+entry.key.length+2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }, entry.value.firstIndex?.let { it } ?: return, entry.value.firstIndex?.let { it+2+entry.value.spanSize } ?: return, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
 
             view.movementMethod = LinkMovementMethod.getInstance()

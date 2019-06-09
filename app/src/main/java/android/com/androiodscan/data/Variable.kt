@@ -7,7 +7,9 @@ data class Variable (
     var study_type: String? = null,
     var parameter_name: String? = null,
     var min_value: Int ?= null,
-    var max_value: Int?= null,
+    var max_value: Int ?= null,
     var default_value: Int?= null,
-    var values: List<Float>?= null
+    var values: List<Float> ?= null,
+    var firstIndex: Int ?= null,
+    var spanSize: Int = 2
 )
