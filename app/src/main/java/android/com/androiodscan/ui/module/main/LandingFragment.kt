@@ -9,7 +9,9 @@ import retrofit2.Callback
 import android.com.androiodscan.R
 import android.com.androiodscan.data.ApiResponse
 import android.com.androiodscan.repository.remote.RemoteController
+import android.com.androiodscan.util.DividerItemDecoration
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_landing.*
 import retrofit2.Call
@@ -70,7 +72,8 @@ class LandingFragment : Fragment() {
             landingListAdapter?.let {
                 adapter = it
             }
-
+            val dividerDecoration = DividerItemDecoration(ContextCompat.getDrawable(context, R.drawable.horizontal_divider))
+            addItemDecoration(dividerDecoration)
         }
     }
 

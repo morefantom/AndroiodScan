@@ -7,5 +7,6 @@
         tools:context=".ui.module.main.LandingFragment">
     <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" android:id="@+id/recyclerView_landing"/>
+            android:layout_height="match_parent" android:id="@+id/recyclerView_landing" android:layerType="software"
+            android:layout_marginStart="16dp" android:layout_marginEnd="16dp"/>
 </FrameLayout>

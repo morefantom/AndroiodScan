@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import android.com.androiodscan.R
 import android.com.androiodscan.data.Variable
 import android.com.androiodscan.databinding.ParameterFragmentBinding
+import android.com.androiodscan.util.DividerItemDecoration
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.parameter_fragment.*
@@ -61,6 +63,8 @@ class ParameterFragment : Fragment() {
             parameterListAdapter?.let {
                 adapter = it
             }
+            val dividerDecoration = DividerItemDecoration(ContextCompat.getDrawable(context, R.drawable.horizontal_divider))
+            addItemDecoration(dividerDecoration)
         }
     }
 
