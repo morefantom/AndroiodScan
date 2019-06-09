@@ -2,8 +2,10 @@ package android.com.androiodscan.ui.module.main
 
 import android.com.androiodscan.R
 import android.com.androiodscan.data.ApiResponse
+import android.com.androiodscan.data.MessageDetail
 import android.com.androiodscan.data.MessageLanding
 import android.com.androiodscan.ui.module.detail.DetailFragment
+import android.com.androiodscan.ui.module.parameter.ParameterFragment
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -24,10 +26,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Subscribe
-    fun onEvent(message: MessageLanding){
+    fun onEventLanding(message: MessageLanding){
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.container_main, DetailFragment.newInstance(message.apiResponse))
+            .addToBackStack(null)
+            .commit()
+    }
+
+    @Subscribe
+    fun onEventDetail(messageDetail: MessageDetail){
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.container_main, ParameterFragment.newInstance(messageDetail.variable))
             .addToBackStack(null)
             .commit()
     }

@@ -1,6 +1,8 @@
 package android.com.androiodscan.util
 
 import android.com.androiodscan.data.Criteria
+import android.com.androiodscan.data.MessageDetail
+import android.com.androiodscan.data.Variable
 import android.com.androiodscan.ui.module.main.MainActivity
 import android.content.Intent
 import android.graphics.Color
@@ -16,6 +18,27 @@ import androidx.databinding.BindingConversion
 import org.greenrobot.eventbus.EventBus
 
 object BindingAdapters {
+
+    @JvmStatic
+    @BindingConversion
+    fun convertToCapital(string: String?): String?{
+        return string?.toUpperCase()
+    }
+
+    @JvmStatic
+    @BindingConversion
+    fun convertToCapitalize(string: String?): String?{
+        return string?.capitalize()
+    }
+
+    @JvmStatic
+    @BindingConversion
+    fun isIndicator(variable: Variable?): Boolean{
+        return variable?.let {
+            variable.type == "indicator"
+        } ?: false
+    }
+
 
     @JvmStatic
     @BindingConversion
@@ -72,8 +95,7 @@ object BindingAdapters {
                     }
 
                     override fun onClick(widget: View) {
-                        widget.context.startActivity(Intent(widget.context, MainActivity::class.java))
-
+                        EventBus.getDefault().post(MessageDetail(entry.value))
                     }
                 }, entry.value.firstIndex?.let { it } ?: return, entry.value.firstIndex?.let { it+2+entry.value.spanSize } ?: return, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
