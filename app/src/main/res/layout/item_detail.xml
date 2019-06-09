@@ -6,6 +6,7 @@
     <data>
 
         <import type="android.view.View" />
+        <import type="android.com.androiodscan.util.BindingAdapters"/>
         <variable name="criteria" type="android.com.androiodscan.data.Criteria"/>
         <variable name="isLast" type="Boolean"/>
 
@@ -18,8 +19,9 @@
 
 
         <TextView
-                android:text="@{criteria.text}"
+                app:specialText="@{criteria}"
                 android:layout_width="0dp"
+                android:autoLink="all"
                 android:layout_height="wrap_content" android:id="@+id/textView_text"
                 app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"

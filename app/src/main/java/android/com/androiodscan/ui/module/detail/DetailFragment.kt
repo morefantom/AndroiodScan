@@ -1,6 +1,5 @@
 package android.com.androiodscan.ui.module.detail
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -25,7 +24,6 @@ class DetailFragment : Fragment() {
         }
     }
 
-    private var viewModel: DetailViewModel ?= null
     private var binding: DetailFragmentBinding ?= null
     private var detailListAdapter: DetailListAdapter ?= null
 
@@ -43,12 +41,6 @@ class DetailFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.detail_fragment, container, false)
         binding?.response = apiResponse
         return binding?.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(DetailViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
