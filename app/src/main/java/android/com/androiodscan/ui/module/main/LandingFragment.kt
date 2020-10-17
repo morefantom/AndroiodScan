@@ -14,20 +14,24 @@ import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_landing.*
+import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Response
+import kotlin.coroutines.CoroutineContext
 
-class LandingFragment : Fragment() {
+class LandingFragment : Fragment(), CoroutineScope {
 
-    companion object {
-        fun newInstance() = LandingFragment()
-    }
+    private var landingListAdapter: LandingListAdapter? = null
+    private var apiResponses = listOf<ApiResponse>()
 
-    private var landingListAdapter: LandingListAdapter ?= null
-    private var apiResponses = mutableListOf<ApiResponse>()
+    private lateinit var job: Job
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        job = Job()
         landingListAdapter = LandingListAdapter(this.context, apiResponses)
     }
 
@@ -40,23 +44,15 @@ class LandingFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        RemoteController.apiResponseDao().getApiResponse().enqueue(object : Callback<List<ApiResponse>> {
-            override fun onFailure(call: Call<List<ApiResponse>>, t: Throwable) {
-                Log.i("Response Fail", t.message)
-            }
+        launch {
+            fetchAndPopulate()
+        }
+    }
 
-            override fun onResponse(call: Call<List<ApiResponse>>, response: Response<List<ApiResponse>>) {
-                if (response.isSuccessful){
-                    response.body()?.let {
-                        apiResponses.clear()
-                        apiResponses.addAll(it)
-                        landingListAdapter?.swap(apiResponses)
-                        landingListAdapter?.notifyDataSetChanged()
-                    }
-                }
-            }
-
-        })
+    private suspend fun fetchAndPopulate() {
+        apiResponses = withContext(Dispatchers.IO) { RemoteController.apiResponseDao().getApiResponse() }
+        landingListAdapter?.swap(apiResponses)
+        landingListAdapter?.notifyDataSetChanged()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -65,14 +61,24 @@ class LandingFragment : Fragment() {
         setupRecycleView()
     }
 
-    private fun setupRecycleView(){
+    override fun onDestroy() {
+        job.cancel()
+        super.onDestroy()
+    }
+
+    private fun setupRecycleView() {
 
         recyclerView_landing.apply {
             layoutManager = LinearLayoutManager(activity)
             landingListAdapter?.let {
                 adapter = it
             }
-            val dividerDecoration = DividerItemDecoration(ContextCompat.getDrawable(context, R.drawable.horizontal_divider))
+            val dividerDecoration = DividerItemDecoration(
+                ContextCompat.getDrawable(
+                    context,
+                    R.drawable.horizontal_divider
+                )
+            )
             addItemDecoration(dividerDecoration)
         }
     }

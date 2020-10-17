@@ -33,7 +33,7 @@ class LandingListAdapter(var context: Context?, private var apiResponses: List<A
         holder.bind(apiResponses[position])
     }
 
-    fun swap(apiResponses: MutableList<ApiResponse>){
+    fun swap(apiResponses: List<ApiResponse>){
         val diffCallback = CardDiffCallback(this.apiResponses, apiResponses)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
 

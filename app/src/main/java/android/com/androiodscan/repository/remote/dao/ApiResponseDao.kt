@@ -7,5 +7,5 @@ import retrofit2.Call
 interface ApiResponseDao {
 
     @GET("/data")
-    fun getApiResponse(): Call<List<ApiResponse>>
+    suspend fun getApiResponse(): List<ApiResponse>
 }
